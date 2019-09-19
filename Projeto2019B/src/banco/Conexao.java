@@ -23,10 +23,10 @@ public class Conexao {
     public static Connection con;
     public static Statement stmt;
     
-    public static void openConnection() {
+    public static void abreConexao() {
         try {
             
-            Connection con = getConnection();
+            Connection con = obterConexao();
             stmt = con.createStatement();
             System.out.print("Conexão com Banco de Dados Criada!");
         } catch (Exception ex) {
@@ -34,7 +34,7 @@ public class Conexao {
         }
     }
     
-    public static Connection getConnection(){
+    public static Connection obterConexao(){
      
         try {
             Class.forName(DRIVER);
@@ -46,7 +46,7 @@ public class Conexao {
         }
     }
     
-    public static void closeConnection(Connection con){
+    public static void fecharConexao(Connection con){
         try{
             
             if(con != null){
@@ -58,10 +58,10 @@ public class Conexao {
         }
     }
     
-    public static void closeConnection(Connection con, PreparedStatement stmt){
+    public static void fecharConexao(Connection con, PreparedStatement stmt){
         
-        //stmt � respons�vel por executar os comandos SQL - DML (Data Manipulation Langage)
-        closeConnection(con);
+        //stmt é responsável por executar os comandos SQL - DML (Data Manipulation Langage)
+        fecharConexao(con);
         
         try{
             
@@ -74,9 +74,9 @@ public class Conexao {
         }
     }
     
-    public static void closeConnection(Connection con, PreparedStatement stmt, ResultSet rs){
+    public static void fecharConexao(Connection con, PreparedStatement stmt, ResultSet rs){
         
-        closeConnection(con, stmt);
+        fecharConexao(con, stmt);
         
         try{
             
