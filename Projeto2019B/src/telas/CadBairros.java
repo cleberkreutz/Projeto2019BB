@@ -1,26 +1,41 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package telas;
 
 import controles.BairroControle;
-import ferramentas.CaixaDeDialogo;
-import ferramentas.Validacao;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import modelos.Bairro;
-
+import ferramentas.*;
 /**
  *
- * @author jdhein
+ * @author Jonas Dhein
  */
 public class CadBairros extends javax.swing.JFrame {
 
     /**
-     * Creates new form CadClientes
+     * Creates new form CadBairros
      */
+    Bairro objBairro;
+    BairroControle objBairroControle;
+    
     public CadBairros() {
-        initComponents();
+        initComponents(); //renderiza os elementos na tela
+        
+        limparTela();
+    }
+    
+    private void atualizarTabela(){
+        try{
+            
+            objBairroControle = new BairroControle(null, jtbBairros);
+            objBairroControle.preencher();
+            
+        }catch(Exception ex){
+            CaixaDeDialogo.obterinstancia().exibirMensagem("ERRO:" + ex.getMessage());
+        }
     }
 
     /**
@@ -32,103 +47,296 @@ public class CadBairros extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        btnIncluir = new javax.swing.JButton();
+        btnAlterar = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtbBairros = new javax.swing.JTable();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        btnLimpar = new javax.swing.JButton();
         txtNome = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        btnSalvar = new javax.swing.JButton();
+        lblId = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jPanel1.setBackground(new java.awt.Color(51, 153, 255));
-
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Cadastro de Bairros");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(121, 121, 121)
-                .addComponent(jLabel1)
-                .addContainerGap(139, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jLabel2.setText("Bairro");
-
-        btnSalvar.setText("SALVAR");
-        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalvarActionPerformed(evt);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSalvar))
-                    .addComponent(jLabel2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
-                .addComponent(jLabel2)
-                .addGap(1, 1, 1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSalvar))
-                .addContainerGap(154, Short.MAX_VALUE))
-        );
+        btnIncluir.setText("INCLUIR");
+        btnIncluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIncluirActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnIncluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
+
+        btnAlterar.setText("ALTERAR");
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAlterar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 190, -1, -1));
+
+        btnExcluir.setText("EXCLUIR");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExcluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 190, -1, -1));
+
+        jtbBairros.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jtbBairros.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jtbBairrosMousePressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jtbBairros);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 451, 110));
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel5.setText("Campos com * são obrigatórios");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel6.setText("Cadastro de Bairros");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, -1, -1));
+
+        btnLimpar.setText("LIMPAR");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLimpar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, -1, -1));
+        getContentPane().add(txtNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 250, -1));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel2.setText("Nome *");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
+
+        lblId.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblId.setText("ID");
+        getContentPane().add(lblId, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        try{
-            //validar os campos
-            if(txtNome.getText().trim().length() == 0){
-                CaixaDeDialogo.obterinstancia().exibirMensagem("Informe um bairro corretamente", 'a');
-                return;
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        // TODO add your handling code here:
+//        try{
+//            if(validaDados()){
+//                
+//                guardaDados('A');
+//                
+//                objVisiDao = new BairroDAO(objBairro, null);
+//                if(objVisiDao.alterar() == true){
+//                    CaixaDeDialogo.obterinstancia().exibirMensagem("Bairro alterado com Sucesso!");
+//                }else{
+//                    CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao alterar visitante, que pena!");
+//                }
+//
+//                limpaTela();
+//
+//            }
+//            
+//        }catch(Exception ex){
+//            CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage());
+//        }
+    }//GEN-LAST:event_btnAlterarActionPerformed
+    
+    private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
+        // INCLUI UM VISITANTE NA BASE DE DADOS
+        if(validarDados()){
+            
+            guardaDados('I');
+            
+            objVisiDao = new BairroDAO(objBairro, null);
+            if(objVisiDao.incluir() == true){
+                CaixaDeDialogo.obterinstancia().exibirMensagem("Bairro incluído com Sucesso!");
+            }else{
+                CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao incluir visitante!");
             }
             
-            //Preenche o objeto Bairro
-            Bairro objBairro = new Bairro();
-            objBairro.setNome(txtNome.getText());
+            limpaTela();
+        }
+    }//GEN-LAST:event_btnIncluirActionPerformed
+
+    private void jtbBairrosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbBairrosMousePressed
+        // TODO add your handling code here:
+        try{
+            
+//            int linhaSelecionada = jtbBairros.getSelectedRow();//pega a linha selecionada
+//            String coluna1 = jtbBairros.getModel()
+//                    .getValueAt(linhaSelecionada, 0).toString(); // Primeira coluna da linha
+//
+//            if(jtbBairros.isColumnSelected(2)){
+//                objVisiDao = new BairroDAO(null, null);
+//
+//                objBairro = objVisiDao.buscar(coluna1);
+//                if (objBairro != null && objBairro.getId() > 0){
+//                    telaAlteracao(objBairro);
+//                }else{
+//                    CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao buscar Cliente no BD!");
+//                }
+//            }
         
-            //incluir no banco
-            BairroControle objBairroCon = new BairroControle(objBairro, null);
-            boolean wRetorno = objBairroCon.incluir();
-            if(wRetorno == true){
-                CaixaDeDialogo.obterinstancia().exibirMensagem("Sucesso", 'i');
-            }else{
-                CaixaDeDialogo.obterinstancia().exibirMensagem("Ops, não deu certo", 'e');
-            }
+        }catch(Exception ex){
+            CaixaDeDialogo.obterinstancia().exibirMensagem(ex.getMessage(), 'e');
+        }
+        
+    }//GEN-LAST:event_jtbBairrosMousePressed
+    
+    private void guardarDados(char tipo){
+//        try{
+//
+//            objBairro = new Bairro();
+//            if(tipo == 'A')
+//                objBairro.setId(Integer.parseInt(lblId.getText()));
+//            
+//            objBairro.setNome(txtNome.getText().trim());
+//            objBairro.setEmail(txtEmail.getText().trim());
+//            objBairro.setTelefone(txtTelefone.getText().replace(" ", ""));
+//            objBairro.setCidade_id(id_cidade);
+//
+//        }catch(Exception ex){
+//            CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage());
+//        }
+    }
+    
+    private void telaAlteracao(Bairro objeto){
+//        try{
+//            
+//            lblId.setText(String.valueOf(obj.getId()));
+//            txtNome.setText(obj.getNome());
+//            txtTelefone.setText(obj.getTelefone());
+//            txtEmail.setText(obj.getEmail());
+//            objComboCidade.SetaComboBox(String.valueOf(obj.getCidade_id()));
+//                        
+//            txtNome.requestFocus();
+//            btnIncluir.setEnabled(false);
+//            btnAlterar.setEnabled(true);
+//            btnExcluir.setEnabled(true);
+//            
+//        }catch(Exception ex){
+//            CaixaDeDialogo.obterinstancia().exibirMensagem(ex.getMessage(), 'e');
+//        }
+    }
+    
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+//        boolean wControle = Tela_Menu.preencheJanelas("Bairros", "I");
+//        if (wControle){
+//            CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao ativar menu 'Ordens'");
+//        }
+//        dispose();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+        //limpaTela();
+    }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+//        try{
+//            boolean wPergunta = CaixaDeDialogo.obterinstancia().pedirConfirmacao("Tem certeza de que deseja excluir?","",'p');
+//
+//            if (wPergunta == true){
+//                objBairro = new Bairro();
+//
+//                Date data = new Date();
+//                SimpleDateFormat formatador = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+//                formatador.format(data);
+//                objBairro.setId(Integer.parseInt(lblId.getText()));
+//                objBairro.setDataExclusao(formatador.format(data));
+//                
+//                objVisiDao = new BairroDAO(objBairro, null);
+//                boolean wControle = objVisiDao.excluir();
+//                if (wControle){
+//                    CaixaDeDialogo.obterinstancia().exibirMensagem("Excluído com Sucesso!");
+//                }else{
+//                    CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao excluir visitante!");
+//                }
+//            }
+//            
+//        }catch(Exception ex){
+//            CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage());
+//        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void limparTela(){
+        try{
+            lblId.setText("ID");
+            txtNome.setText("");
+           
+            btnIncluir.setEnabled(true);
+            btnAlterar.setEnabled(false);
+            btnExcluir.setEnabled(false);
+            
+            atualizarTabela();
             
         }catch(Exception ex){
-            
+            CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage());
         }
-    }//GEN-LAST:event_btnSalvarActionPerformed
-
+    }
+    
+    private boolean validarDados(){
+//        try{
+//            //testa telefone maior que 15
+//            if(txtTelefone.getText().replace(" ", "").length() > 15){
+//                CaixaDeDialogo.obterinstancia().exibirMensagem("Telefone precisa ser menor que 15 caracteres!");
+//                txtTelefone.requestFocus();
+//                return false;
+//            }
+//            
+//            if(txtTelefone.getText().trim().equals("")){
+//                CaixaDeDialogo.obterinstancia().exibirMensagem("Preencha com um telefone!");
+//                txtTelefone.requestFocus();
+//                return false;
+//            }
+//            
+//            if(Validacao.validarEmail(txtEmail.getText()) == false){
+//                CaixaDeDialogo.obterinstancia().exibirMensagem("Informe um e-mail válido!");
+//                return false;
+//            }
+//            
+//            //validando o campo nome
+//            if(txtNome.getText().trim().equals("")){
+//                CaixaDeDialogo.obterinstancia().exibirMensagem("Campo Nome não pode ser em branco!");
+//                return false;
+//            }
+//            
+//            if(cmbCidade.getSelectedIndex() <= 0){
+//                CaixaDeDialogo.obterinstancia().exibirMensagem("Selecione uma cidade!");
+//                return false;
+//            }
+//                
+//            return true;
+//            
+//        }catch(Exception ex){
+//            CaixaDeDialogo.obterinstancia().exibirMensagem("ERROU:" + ex.getMessage());
+//            return false;
+//        }
+        return false;
+    }
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -166,10 +374,16 @@ public class CadBairros extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnSalvar;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton btnAlterar;
+    private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnIncluir;
+    private javax.swing.JButton btnLimpar;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jtbBairros;
+    private javax.swing.JLabel lblId;
     private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables
 }
