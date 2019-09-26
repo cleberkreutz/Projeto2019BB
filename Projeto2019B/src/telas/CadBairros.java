@@ -54,9 +54,10 @@ public class CadBairros extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         btnLimpar = new javax.swing.JButton();
-        txtNome = new javax.swing.JTextField();
+        txtCodigo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         lblId = new javax.swing.JLabel();
+        txtNome = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -72,7 +73,7 @@ public class CadBairros extends javax.swing.JFrame {
                 btnIncluirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnIncluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 190, -1, -1));
+        getContentPane().add(btnIncluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 190, -1, -1));
 
         btnExcluir.setText("EXCLUIR");
         btnExcluir.addActionListener(new java.awt.event.ActionListener() {
@@ -80,7 +81,7 @@ public class CadBairros extends javax.swing.JFrame {
                 btnExcluirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnExcluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 190, -1, -1));
+        getContentPane().add(btnExcluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 190, -1, -1));
 
         jtbBairros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -116,8 +117,8 @@ public class CadBairros extends javax.swing.JFrame {
                 btnLimparActionPerformed(evt);
             }
         });
-        getContentPane().add(btnLimpar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, -1, -1));
-        getContentPane().add(txtNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 250, -1));
+        getContentPane().add(btnLimpar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 190, -1, -1));
+        getContentPane().add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 50, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Nome *");
@@ -126,23 +127,40 @@ public class CadBairros extends javax.swing.JFrame {
         lblId.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblId.setText("ID");
         getContentPane().add(lblId, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, -1, -1));
+        getContentPane().add(txtNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 250, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
     private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
-        // INCLUI UM VISITANTE NA BASE DE DADOS
-        if(validarDados()){
-            
-            //guardar as informacoes no objeto = objBairro
-            
-            objBairroControle = new BairroControle(objBairro, null);
-            if(objBairroControle.incluir() == true){
-                CaixaDeDialogo.obterinstancia().exibirMensagem("Bairro incluído com Sucesso!");
+        try{
+            boolean retorno;
+            //validar os campos
+            if(txtNome.getText().trim().length() == 0){
+                CaixaDeDialogo.obterinstancia().exibirMensagem("Informe um bairro corretamente", 'a');
+                return;
+            }
+
+            objBairro = new Bairro();
+            objBairro.setNome(txtNome.getText().trim());
+            if(txtCodigo.getText().trim().length() > 0){
+                objBairro.setId(Integer.parseInt(txtCodigo.getText()));
+                objBairroControle = new BairroControle(objBairro, null);
+                retorno = objBairroControle.alterar();
             }else{
-                CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao incluir visitante!");
+                objBairroControle = new BairroControle(objBairro, null);
+                retorno = objBairroControle.incluir();
             }
             
+            if(retorno = true){
+                CaixaDeDialogo.obterinstancia().exibirMensagem("Registro salvo");
+            }else{
+                CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao tentar salvar");
+            }
+
+        }catch(Exception ex){
+            CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao tentar incluir");
+            System.out.println("ERRO: " + ex.getMessage().toString());
         }
     }//GEN-LAST:event_btnIncluirActionPerformed
 
@@ -213,10 +231,9 @@ public class CadBairros extends javax.swing.JFrame {
     private void limparTela(){
         try{
             lblId.setText("ID");
-            txtNome.setText("");
+            txtCodigo.setText("");
            
             btnIncluir.setEnabled(true);
-            btnAlterar.setEnabled(false);
             btnExcluir.setEnabled(false);
             
             atualizarTabela();
@@ -224,48 +241,7 @@ public class CadBairros extends javax.swing.JFrame {
         }catch(Exception ex){
             CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage());
         }
-    }
-    
-    private boolean validarDados(){
-//        try{
-//            //testa telefone maior que 15
-//            if(txtTelefone.getText().replace(" ", "").length() > 15){
-//                CaixaDeDialogo.obterinstancia().exibirMensagem("Telefone precisa ser menor que 15 caracteres!");
-//                txtTelefone.requestFocus();
-//                return false;
-//            }
-//            
-//            if(txtTelefone.getText().trim().equals("")){
-//                CaixaDeDialogo.obterinstancia().exibirMensagem("Preencha com um telefone!");
-//                txtTelefone.requestFocus();
-//                return false;
-//            }
-//            
-//            if(Validacao.validarEmail(txtEmail.getText()) == false){
-//                CaixaDeDialogo.obterinstancia().exibirMensagem("Informe um e-mail válido!");
-//                return false;
-//            }
-//            
-//            //validando o campo nome
-//            if(txtNome.getText().trim().equals("")){
-//                CaixaDeDialogo.obterinstancia().exibirMensagem("Campo Nome não pode ser em branco!");
-//                return false;
-//            }
-//            
-//            if(cmbCidade.getSelectedIndex() <= 0){
-//                CaixaDeDialogo.obterinstancia().exibirMensagem("Selecione uma cidade!");
-//                return false;
-//            }
-//                
-//            return true;
-//            
-//        }catch(Exception ex){
-//            CaixaDeDialogo.obterinstancia().exibirMensagem("ERROU:" + ex.getMessage());
-//            return false;
-//        }
-        return false;
-    }
-    
+    }   
     
     
     /**
@@ -314,6 +290,7 @@ public class CadBairros extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jtbBairros;
     private javax.swing.JLabel lblId;
+    private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables
 }
