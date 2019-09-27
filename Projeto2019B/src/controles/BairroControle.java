@@ -86,6 +86,7 @@ public class BairroControle {
         
         cabecalhos.add("Código");
         cabecalhos.add("Nome");
+        cabecalhos.add("Excluir");
         
         ResultSet result = null;
         
@@ -104,6 +105,7 @@ public class BairroControle {
                 
                 linha.add(result.getInt(1));
                 linha.add(result.getString(2));
+                linha.add("X");
                 
                 dadosTabela.add(linha);
             }
@@ -127,14 +129,17 @@ public class BairroControle {
 
         // redimensiona as colunas de uma tabela
         TableColumn column = null;
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i <= 2; i++) {
             column = jtbBairros.getColumnModel().getColumn(i);
             switch (i) {
                 case 0:
-                    column.setPreferredWidth(80);
+                    column.setPreferredWidth(60);
                     break;
                 case 1:
-                    column.setPreferredWidth(200);
+                    column.setPreferredWidth(230);
+                    break;
+                case 2:
+                    column.setPreferredWidth(10);
                     break;
             }
         }
@@ -157,31 +162,28 @@ public class BairroControle {
         //return (true);
     }
     
-    /*
     public Bairro buscar(String id)
     {
         try {
-            ConnectionFactory.abreConexao();
+            Conexao.abreConexao();
             ResultSet rs = null;
 
             String SQL = "";
             SQL = " SELECT id, nome ";
-            SQL += " FROM area ";
+            SQL += " FROM bairros ";
             SQL += " WHERE id = '" + id + "'";
-            SQL += " AND COALESCE(dataExclusao,'') = '' ";
-            //stm.executeQuery(SQL);
+            SQL += " AND COALESCE(data_exclusao,'') = '' ";
 
             try{
-                System.out.println("Vai Executar Conexão em buscar area");
-                rs = ConnectionFactory.stmt.executeQuery(SQL);
-                System.out.println("Executou Conexão em buscar area");
+                System.out.println("Vai Executar Conexão em buscar");
+                rs = Conexao.stmt.executeQuery(SQL);
+                System.out.println("Executou Conexão em buscar");
 
-                objArea = new Area();
-                
+                objBairro = new Bairro();
                 if(rs.next() == true)
                 {
-                    objArea.setId(rs.getInt(1));
-                    objArea.setNome(rs.getString(2));
+                    objBairro.setId(rs.getInt(1));
+                    objBairro.setNome(rs.getString(2));
                 }
             }
 
@@ -197,21 +199,18 @@ public class BairroControle {
         }
         
         System.out.println ("Executou buscar area com sucesso");
-        return objArea;
+        return objBairro;
     }
-    
-    
     
     public boolean excluir(){
         
-        ConnectionFactory.abreConexao();
-        Connection con = ConnectionFactory.getConnection();
+        Conexao.abreConexao();
+        Connection con = Conexao.obterConexao();
         PreparedStatement stmt = null;
         
         try {
-            stmt = con.prepareStatement("UPDATE area SET dataExclusao=? WHERE id=?");
-            stmt.setString(1, objArea.getDataExclusao());//1º?
-            stmt.setInt(2, objArea.getId());//5º?
+            stmt = con.prepareStatement("UPDATE bairros SET data_exclusao= now() WHERE id=?");
+            stmt.setInt(1, objBairro.getId());
                         
             stmt.executeUpdate();
             
@@ -221,11 +220,11 @@ public class BairroControle {
             System.out.println(ex.getMessage());
             return false;
         }finally{
-            ConnectionFactory.closeConnection(con, stmt);
+            Conexao.fecharConexao(con, stmt);
         }
-        
     }
     
+    /*
     public ArrayList<Area> listar() {
 
         ConnectionFactory.abreConexao();

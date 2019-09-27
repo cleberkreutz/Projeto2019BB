@@ -165,16 +165,10 @@ public class CadBairros extends javax.swing.JFrame {
             if(jtbBairros.isColumnSelected(2)){
                 try{
                     boolean wPergunta = CaixaDeDialogo.obterinstancia().pedirConfirmacao("Tem certeza de que deseja excluir?","",'p');
-
                     if (wPergunta == true){
                         objBairro = new Bairro();
-
-                        Date data = new Date();
-                        SimpleDateFormat formatador = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                        formatador.format(data);
                         objBairro.setId(Integer.parseInt(lblId.getText()));
-                        objBairro.setDataExclusao(formatador.format(data));
-
+                        
                         objBairroControle = new BairroControle(objBairro, null);
                         boolean wControle = objBairroControle.excluir();
                         if (wControle){
@@ -187,14 +181,15 @@ public class CadBairros extends javax.swing.JFrame {
                 }catch(Exception ex){
                     CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage());
                 }
-            }
-            
-            objBairroControle = new BairroControle(null, null);
-            objBairro = objBairroControle.buscar(codigo);
-            if (objBairro != null && objBairro.getId() > 0){
-                preencherCampos();
             }else{
-                CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao buscar Cliente no BD!");
+            
+                objBairroControle = new BairroControle(null, null);
+                objBairro = objBairroControle.buscar(codigo);
+                if (objBairro != null && objBairro.getId() > 0){
+                    preencherCampos();
+                }else{
+                    CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao buscar Cliente no BD!");
+                }
             }
         
         }catch(Exception ex){
