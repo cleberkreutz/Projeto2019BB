@@ -47,14 +47,12 @@ public class CadBairros extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnIncluir = new javax.swing.JButton();
-        btnExcluir = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtbBairros = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         btnLimpar = new javax.swing.JButton();
-        txtCodigo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         lblId = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
@@ -67,21 +65,13 @@ public class CadBairros extends javax.swing.JFrame {
         });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnIncluir.setText("SALVAR");
-        btnIncluir.addActionListener(new java.awt.event.ActionListener() {
+        btnSalvar.setText("SALVAR");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIncluirActionPerformed(evt);
+                btnSalvarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnIncluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 190, -1, -1));
-
-        btnExcluir.setText("EXCLUIR");
-        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExcluirActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnExcluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 190, -1, -1));
+        getContentPane().add(btnSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 190, -1, -1));
 
         jtbBairros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -118,7 +108,6 @@ public class CadBairros extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnLimpar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 190, -1, -1));
-        getContentPane().add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 50, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Nome *");
@@ -132,7 +121,7 @@ public class CadBairros extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    private void btnIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIncluirActionPerformed
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try{
             boolean retorno;
             //validar os campos
@@ -143,8 +132,8 @@ public class CadBairros extends javax.swing.JFrame {
 
             objBairro = new Bairro();
             objBairro.setNome(txtNome.getText().trim());
-            if(txtCodigo.getText().trim().length() > 0){
-                objBairro.setId(Integer.parseInt(txtCodigo.getText()));
+            if(!lblId.getText().equals("ID")){
+                objBairro.setId(Integer.parseInt(lblId.getText()));
                 objBairroControle = new BairroControle(objBairro, null);
                 retorno = objBairroControle.alterar();
             }else{
@@ -157,38 +146,63 @@ public class CadBairros extends javax.swing.JFrame {
             }else{
                 CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao tentar salvar");
             }
+            
+            atualizarTabela();
 
         }catch(Exception ex){
             CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao tentar incluir");
             System.out.println("ERRO: " + ex.getMessage().toString());
         }
-    }//GEN-LAST:event_btnIncluirActionPerformed
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void jtbBairrosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbBairrosMousePressed
-        // TODO add your handling code here:
         try{
             
-//            int linhaSelecionada = jtbBairros.getSelectedRow();//pega a linha selecionada
-//            String coluna1 = jtbBairros.getModel()
-//                    .getValueAt(linhaSelecionada, 0).toString(); // Primeira coluna da linha
-//
-//            if(jtbBairros.isColumnSelected(2)){
-//                objVisiDao = new BairroDAO(null, null);
-//
-//                objBairro = objVisiDao.buscar(coluna1);
-//                if (objBairro != null && objBairro.getId() > 0){
-//                    telaAlteracao(objBairro);
-//                }else{
-//                    CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao buscar Cliente no BD!");
-//                }
-//            }
+            int linhaSelecionada = jtbBairros.getSelectedRow();//pega a linha selecionada
+            String codigo = jtbBairros.getModel().getValueAt(linhaSelecionada, 0).toString(); // Primeira coluna da linha
+
+            //Verifica se clicou na coluna 2 = EXCLUIR
+            if(jtbBairros.isColumnSelected(2)){
+                try{
+                    boolean wPergunta = CaixaDeDialogo.obterinstancia().pedirConfirmacao("Tem certeza de que deseja excluir?","",'p');
+
+                    if (wPergunta == true){
+                        objBairro = new Bairro();
+
+                        Date data = new Date();
+                        SimpleDateFormat formatador = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                        formatador.format(data);
+                        objBairro.setId(Integer.parseInt(lblId.getText()));
+                        objBairro.setDataExclusao(formatador.format(data));
+
+                        objBairroControle = new BairroControle(objBairro, null);
+                        boolean wControle = objBairroControle.excluir();
+                        if (wControle){
+                            CaixaDeDialogo.obterinstancia().exibirMensagem("Excluído com Sucesso!");
+                        }else{
+                            CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao excluir!");
+                        }
+                    }
+
+                }catch(Exception ex){
+                    CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage());
+                }
+            }
+            
+            objBairroControle = new BairroControle(null, null);
+            objBairro = objBairroControle.buscar(codigo);
+            if (objBairro != null && objBairro.getId() > 0){
+                preencherCampos();
+            }else{
+                CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao buscar Cliente no BD!");
+            }
         
         }catch(Exception ex){
             CaixaDeDialogo.obterinstancia().exibirMensagem(ex.getMessage(), 'e');
         }
         
     }//GEN-LAST:event_jtbBairrosMousePressed
-        
+    
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
 //        boolean wControle = Tela_Menu.preencheJanelas("Bairros", "I");
 //        if (wControle){
@@ -198,43 +212,15 @@ public class CadBairros extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        //limpaTela();
+        limparTela();
     }//GEN-LAST:event_btnLimparActionPerformed
-
-    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-//        try{
-//            boolean wPergunta = CaixaDeDialogo.obterinstancia().pedirConfirmacao("Tem certeza de que deseja excluir?","",'p');
-//
-//            if (wPergunta == true){
-//                objBairro = new Bairro();
-//
-//                Date data = new Date();
-//                SimpleDateFormat formatador = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-//                formatador.format(data);
-//                objBairro.setId(Integer.parseInt(lblId.getText()));
-//                objBairro.setDataExclusao(formatador.format(data));
-//                
-//                objVisiDao = new BairroDAO(objBairro, null);
-//                boolean wControle = objVisiDao.excluir();
-//                if (wControle){
-//                    CaixaDeDialogo.obterinstancia().exibirMensagem("Excluído com Sucesso!");
-//                }else{
-//                    CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao excluir visitante!");
-//                }
-//            }
-//            
-//        }catch(Exception ex){
-//            CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage());
-//        }
-    }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void limparTela(){
         try{
             lblId.setText("ID");
-            txtCodigo.setText("");
+            txtNome.setText("");
            
-            btnIncluir.setEnabled(true);
-            btnExcluir.setEnabled(false);
+            btnSalvar.setEnabled(true);
             
             atualizarTabela();
             
@@ -243,6 +229,19 @@ public class CadBairros extends javax.swing.JFrame {
         }
     }   
     
+    private void preencherCampos(){
+        try{
+            lblId.setText(String.valueOf(objBairro.getId()));
+            txtNome.setText(objBairro.getNome());
+           
+            btnSalvar.setEnabled(true);
+            
+            atualizarTabela();
+            
+        }catch(Exception ex){
+            CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage());
+        }
+    }   
     
     /**
      * @param args the command line arguments
@@ -281,16 +280,14 @@ public class CadBairros extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnExcluir;
-    private javax.swing.JButton btnIncluir;
     private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jtbBairros;
     private javax.swing.JLabel lblId;
-    private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables
 }
