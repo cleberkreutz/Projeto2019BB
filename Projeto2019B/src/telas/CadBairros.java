@@ -56,6 +56,7 @@ public class CadBairros extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         lblId = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -84,6 +85,15 @@ public class CadBairros extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jtbBairros.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+                jtbBairrosAncestorRemoved(evt);
+            }
+        });
         jtbBairros.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jtbBairrosMousePressed(evt);
@@ -91,7 +101,7 @@ public class CadBairros extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jtbBairros);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 451, 110));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 450, 110));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("Campos com * são obrigatórios");
@@ -115,8 +125,11 @@ public class CadBairros extends javax.swing.JFrame {
 
         lblId.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblId.setText("ID");
-        getContentPane().add(lblId, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, -1, -1));
+        getContentPane().add(lblId, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, -1, -1));
         getContentPane().add(txtNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 250, -1));
+
+        jLabel1.setText("ID ");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -132,7 +145,7 @@ public class CadBairros extends javax.swing.JFrame {
 
             objBairro = new Bairro();
             objBairro.setNome(txtNome.getText().trim());
-            if(!lblId.getText().equals("ID")){
+            if(!lblId.getText().equals(lblId)){
                 objBairro.setId(Integer.parseInt(lblId.getText()));
                 objBairroControle = new BairroControle(objBairro, null);
                 retorno = objBairroControle.alterar();
@@ -199,9 +212,9 @@ public class CadBairros extends javax.swing.JFrame {
     }//GEN-LAST:event_jtbBairrosMousePressed
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-//        boolean wControle = Tela_Menu.preencheJanelas("Bairros", "I");
+//       boolean wControle = Tela_Menu.preencheJanelas("Bairros", "I");
 //        if (wControle){
-//            CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao ativar menu 'Ordens'");
+//          CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao ativar menu 'Ordens'");
 //        }
 //        dispose();
     }//GEN-LAST:event_formWindowClosing
@@ -210,9 +223,13 @@ public class CadBairros extends javax.swing.JFrame {
         limparTela();
     }//GEN-LAST:event_btnLimparActionPerformed
 
+    private void jtbBairrosAncestorRemoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jtbBairrosAncestorRemoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtbBairrosAncestorRemoved
+
     private void limparTela(){
         try{
-            lblId.setText("ID");
+            lblId.setText("");
             txtNome.setText("");
            
             btnSalvar.setEnabled(true);
@@ -277,6 +294,7 @@ public class CadBairros extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

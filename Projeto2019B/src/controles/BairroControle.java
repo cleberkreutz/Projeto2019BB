@@ -88,6 +88,7 @@ public class BairroControle {
         cabecalhos.add("Nome");
         cabecalhos.add("Excluir");
         
+        
         ResultSet result = null;
         
         try {
@@ -106,6 +107,7 @@ public class BairroControle {
                 linha.add(result.getInt(1));
                 linha.add(result.getString(2));
                 linha.add("X");
+
                 
                 dadosTabela.add(linha);
             }
@@ -172,7 +174,7 @@ public class BairroControle {
             SQL = " SELECT id, nome ";
             SQL += " FROM bairros ";
             SQL += " WHERE id = '" + id + "'";
-            SQL += " AND COALESCE(data_exclusao,'') = '' ";
+            SQL += " AND data_exclusao is null;";
 
             try{
                 System.out.println("Vai Executar Conexão em buscar");
@@ -224,30 +226,30 @@ public class BairroControle {
         }
     }
     
-    /*
-    public ArrayList<Area> listar() {
+    
+    public ArrayList<Bairro> listar() {
 
-        ConnectionFactory.abreConexao();
+        Conexao.abreConexao();
         
-        ArrayList<Area> listagem_areas = new ArrayList();
-        Area area_item = null;
+        ArrayList<Bairro> listagem_bairros = new ArrayList();
+        Bairro bairro_item = null;
         
         ResultSet result = null;
         
         try {
 
             String SQL = "";
-            SQL = " SELECT id, nome AS nomeArea ";
-            SQL += " FROM area ";
+            SQL = " SELECT id, nome AS nomeBairro ";
+            SQL += " FROM bairro ";
             SQL += " ORDER BY nome ";
             
-            result = ConnectionFactory.stmt.executeQuery(SQL);
+            result = Conexao.stmt.executeQuery(SQL);
 
             while (result.next()) {
-                area_item = new Area();
-                area_item.setId(result.getInt("id"));
-                area_item.setNome(result.getString("nomeArea"));
-                listagem_areas.add(area_item);
+                bairro_item = new Bairro();
+                bairro_item.setId(result.getInt("id"));
+                bairro_item.setNome(result.getString("nomeBairro"));
+                listagem_bairros.add(bairro_item);
             }
             
         } catch (Exception e) {
@@ -256,9 +258,9 @@ public class BairroControle {
             return null;
         }
         
-        return listagem_areas;
+        return listagem_bairros;
     }
     
     
-    */
+   
 }
