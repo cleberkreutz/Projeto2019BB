@@ -37,6 +37,7 @@ public class BairroControle {
         Connection con = Conexao.obterConexao();
         PreparedStatement stmt = null;
         
+        
         try{
             stmt = con.prepareStatement("INSERT INTO bairros(nome) VALUES(?)");
             stmt.setString(1, objBairro.getNome());
