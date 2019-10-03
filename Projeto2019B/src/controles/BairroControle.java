@@ -19,7 +19,7 @@ import javax.swing.table.TableColumn;
 import modelos.Bairro;
 /**
  *
- * @author Jonas Dhein
+ * @author Cleber Kreutz
  */
 public class BairroControle {
     
@@ -97,7 +97,8 @@ public class BairroControle {
             String SQL = "";
             SQL = " SELECT id, nome ";
             SQL += " FROM bairros ";
-            SQL += " ORDER BY nome ";
+            SQL += " WHERE data_exclusao is null";
+            SQL += " ORDER BY id ";
             
             result = Conexao.stmt.executeQuery(SQL);
 
@@ -212,7 +213,7 @@ public class BairroControle {
         PreparedStatement stmt = null;
         
         try {
-            stmt = con.prepareStatement("UPDATE bairros SET data_exclusao= now() WHERE id=?");
+            stmt = con.prepareStatement("UPDATE bairros SET data_exclusao = now() WHERE id=?");
             stmt.setInt(1, objBairro.getId());
                         
             stmt.executeUpdate();

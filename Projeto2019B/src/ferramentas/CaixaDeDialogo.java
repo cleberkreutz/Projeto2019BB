@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Jonas Dhein
+ * @author Cleber Kreutz
  */
 public class CaixaDeDialogo {
     

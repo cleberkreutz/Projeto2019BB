@@ -6,7 +6,7 @@ import javax.swing.JFormattedTextField;
 
 /**
  *
- * @author Jonas Dhein
+ * @author Cleber Kreutz
  */
 public class Validacao {
 

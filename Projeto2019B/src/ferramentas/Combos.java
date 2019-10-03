@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 
 /**
  *
- * @author Jonas Dhein
+ * @author Cleber Kreutz
  */
 public class Combos {
     private String codigo;

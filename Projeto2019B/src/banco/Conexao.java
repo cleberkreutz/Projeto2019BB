@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author jonas
+ * @author Cleber Kreutz
  */
 public class Conexao {
     

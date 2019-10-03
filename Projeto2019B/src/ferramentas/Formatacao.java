@@ -8,7 +8,7 @@ import javax.swing.text.*;
 
 /**
  *
- * @author Jonas Dhein
+ * @author Cleber Kreutz
  */
 public class Formatacao {
 
