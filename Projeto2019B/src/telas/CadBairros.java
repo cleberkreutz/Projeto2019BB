@@ -11,7 +11,7 @@ import modelos.Bairro;
 import ferramentas.*;
 /**
  *
- * @author Jonas Dhein
+ * @author Cleber Kreutz
  */
 public class CadBairros extends javax.swing.JFrame {
 
@@ -56,7 +56,6 @@ public class CadBairros extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         lblId = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -125,11 +124,8 @@ public class CadBairros extends javax.swing.JFrame {
 
         lblId.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblId.setText("ID");
-        getContentPane().add(lblId, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, -1, -1));
+        getContentPane().add(lblId, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, -1, -1));
         getContentPane().add(txtNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 250, -1));
-
-        jLabel1.setText("ID ");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -145,7 +141,7 @@ public class CadBairros extends javax.swing.JFrame {
 
             objBairro = new Bairro();
             objBairro.setNome(txtNome.getText().trim());
-            if(!lblId.getText().equals(lblId)){
+            if(!lblId.getText().equals("ID")){
                 objBairro.setId(Integer.parseInt(lblId.getText()));
                 objBairroControle = new BairroControle(objBairro, null);
                 retorno = objBairroControle.alterar();
@@ -161,6 +157,7 @@ public class CadBairros extends javax.swing.JFrame {
             }
             
             atualizarTabela();
+            limparTela();
 
         }catch(Exception ex){
             CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao tentar incluir");
@@ -176,6 +173,13 @@ public class CadBairros extends javax.swing.JFrame {
 
             //Verifica se clicou na coluna 2 = EXCLUIR
             if(jtbBairros.isColumnSelected(2)){
+                objBairroControle = new BairroControle(null, null);
+                objBairro = objBairroControle.buscar(codigo);
+                if (objBairro != null && objBairro.getId() > 0){
+                    preencherCampos();
+                }else{
+                    CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao buscar Cliente no BD!");
+                }
                 try{
                     boolean wPergunta = CaixaDeDialogo.obterinstancia().pedirConfirmacao("Tem certeza de que deseja excluir?","",'p');
                     if (wPergunta == true){
@@ -190,6 +194,7 @@ public class CadBairros extends javax.swing.JFrame {
                             CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao excluir!");
                         }
                     }
+                    limparTela();
 
                 }catch(Exception ex){
                     CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage());
@@ -229,7 +234,7 @@ public class CadBairros extends javax.swing.JFrame {
 
     private void limparTela(){
         try{
-            lblId.setText("");
+            lblId.setText("ID");
             txtNome.setText("");
            
             btnSalvar.setEnabled(true);
@@ -294,7 +299,6 @@ public class CadBairros extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
